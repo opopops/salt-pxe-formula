@@ -1,0 +1,24 @@
+pxe:
+  lookup:
+    user: dnsmasq
+    group: www-data
+  netboot:
+    clonezilla:
+      dists:
+        stable:
+          version: 2.5.2-31
+          archs:
+            - amd64
+    debian:
+      dists:
+        jessie:
+          archs:
+            - amd64
+        stretch:
+          archs:
+            - amd64
+    ubuntu:
+      dists:
+        xenial:
+          archs:
+            - amd64

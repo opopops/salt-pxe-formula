@@ -1,5 +1,7 @@
 pxe:
   netboot:
+    clonezilla:
+      base_url: 'http://sourceforge.net/projects/clonezilla/files'
     debian:
       base_url: 'http://ftp.debian.org'
     ubuntu:
