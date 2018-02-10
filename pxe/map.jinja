@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{%- set os         = salt['grains.get']('os') %}
+{%- set osrelease  = salt['grains.get']('osrelease') %}
+{%- set oscodename = salt['grains.get']('oscodename') %}
+
+{## Start with defaults from defaults.yaml ##}
+{% import_yaml 'pxe/defaults.yaml' as default_settings %}
+
+{##
+Setup variables using grains['os_family'] based logic, only add key:values
+that differ from what is in defaults.yaml
+##}
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': salt['grains.filter_by']({
+            'Raspbian': ['syslinux-common', 'syslinux-efi', 'pxelinux'],
+            'default': ['syslinux', 'syslinux-efi', 'pxelinux', 'memtest86+']
+        }, grain="os"),
+        'user': 'root',
+        'group': 'root',
+        'root_dir': '/srv/pxe',
+        'bios_modules_dir': '/usr/lib/syslinux/modules/bios',
+        'pxelinux_file': '/usr/lib/PXELINUX/pxelinux.0',
+        'efi32_modules_dir': '/usr/lib/syslinux/modules/efi32',
+        'efi32_syslinux_file': '/usr/lib/SYSLINUX.EFI/efi32/syslinux.efi',
+        'efi64_modules_dir': '/usr/lib/syslinux/modules/efi64',
+        'efi64_syslinux_file': '/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi',
+        'memtest_file': '/boot/memtest86+.bin',
+    },
+}
+, grain="os_family"
+, merge=salt['pillar.get']('pxe:lookup')) %}
+
+{## Merge the flavor_map to the default settings ##}
+{% do default_settings.pxe.update(os_family_map) %}
+
+{## Merge in pxe:lookup pillar ##}
+{% set pxe = salt['pillar.get'](
+        'pxe',
+        default=default_settings.pxe,
+        merge=True
+    )
+%}

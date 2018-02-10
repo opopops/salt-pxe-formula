@@ -1,0 +1,6 @@
+pxe:
+  netboot:
+    debian:
+      base_url: 'http://ftp.debian.org'
+    ubuntu:
+      base_url: 'http://archive.ubuntu.com'
