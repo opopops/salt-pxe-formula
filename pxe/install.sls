@@ -38,7 +38,7 @@ pxe_bios_dir:
     - source: {{pxe.bios_modules_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - mode: 644
+    - mode: 755
     - force: True
     - require:
       - file: pxe_root_dir
@@ -80,7 +80,7 @@ pxe_efi32_dir:
     - source: {{pxe.efi32_modules_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - mode: 644
+    - mode: 755
     - force: True
 
 pxe_efi32_pxelinux_conf_dir:
@@ -123,7 +123,7 @@ pxe_efi64_dir:
     - source: {{pxe.efi64_modules_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - mode: 644
+    - mode: 755
     - force: True
 
 pxe_efi64_pxelinux_conf_dir:
