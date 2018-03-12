@@ -59,11 +59,7 @@ pxe_boot_{{os}}_{{dist}}_dir:
 pxe_boot_{{os}}_{{dist}}_{{arch}}:
   archive.extracted:
     - name: {{pxe.root_dir | path_join('boot', os, dist, arch)}}
-    {%- if os_params.source is defined %}
-    - source: {{os_params.source}}
-    {%- else %}
     - source: {{os_params.base_url}}/clonezilla_live_{{dist}}/{{dist_params.version}}/clonezilla-live-{{dist_params.version}}-{{arch}}.zip
-    {%- endif %}
     - skip_verify: True
     - user: {{pxe.user}}
     - group: {{pxe.group}}
@@ -92,14 +88,10 @@ pxe_boot_{{os}}_{{dist}}_dir:
 pxe_boot_{{os}}_{{dist}}_{{arch}}:
   archive.extracted:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, arch)}}
-    {%- if os_params.source is defined %}
-    - source: {{os_params.source}}
-    {%- else %}
-      {%- if os == 'debian' %}
+    {%- if os == 'debian' %}
     - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/current/images/netboot/netboot.tar.gz
-      {%- elif os == 'ubuntu' %}
+    {%- elif os == 'ubuntu' %}
     - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}-updates/main/installer-{{arch}}/current/images/netboot/netboot.tar.gz
-      {%- endif %}
     {%- endif %}
     - skip_verify: True
     - options: --strip-components=3 
