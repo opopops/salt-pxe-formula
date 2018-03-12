@@ -89,9 +89,9 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
   archive.extracted:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, arch)}}
     {%- if os == 'debian' %}
-    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/current/images/netboot/netboot.tar.gz
+    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{dist_params.version|default('current')}}/images/netboot/netboot.tar.gz
     {%- elif os == 'ubuntu' %}
-    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}-updates/main/installer-{{arch}}/current/images/netboot/netboot.tar.gz
+    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}-updates/main/installer-{{arch}}/{{dist_params.version|default('current')}}/images/netboot/netboot.tar.gz
     {%- endif %}
     - skip_verify: True
     - options: --strip-components=3 
