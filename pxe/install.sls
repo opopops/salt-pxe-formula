@@ -18,6 +18,20 @@ pxe_root_dir:
     - require:
       - pkg: pxe_packages
 
+pxe_web_dir:
+  file.directory:
+    - name: {{pxe.root_dir | path_join('www')}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - dir_mode: 755
+    - file_mode: 644
+    - recurse:
+      - user
+      - group
+      - mode
+    - require:
+      - file: pxe_root_dir
+
 pxe_pxelinux_conf_dir:
   file.directory:
     - name: {{pxe.root_dir | path_join('pxelinux.cfg')}}
