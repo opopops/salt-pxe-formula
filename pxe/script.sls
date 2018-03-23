@@ -15,7 +15,7 @@
     - file_mode: 644
     - makedirs: True
     - template: jinja
-    - defaults: {{ preseed.get('settings', {}) }}
+    - defaults: {{ script.get('settings', {}) }}
   {%- elif script.source is defined %}
 {{pxe.root_dir|path_join('scripts', script.path)}}:
   file.managed:
@@ -25,6 +25,6 @@
     - mode: 644
     - makedirs: True
     - template: jinja
-    - defaults: {{ preseed.get('settings', {}) }}
+    - defaults: {{ script.get('settings', {}) }}
   {%- endif %}
 {%- endfor %}
