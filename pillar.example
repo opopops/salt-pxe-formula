@@ -9,6 +9,7 @@ pxe:
           version: 2.5.2-31
           archs:
             - amd64
+
     debian:
       dists:
         jessie:
@@ -17,15 +18,20 @@ pxe:
         stretch:
           archs:
             - amd64
+
     ubuntu:
       dists:
         xenial:
           archs:
             - amd64
+
     preseed:
       - source: salt://path
         file: preseed-box-crypto-nightly.cfg:
         os: debian
         oscodename: stretch
+
+    script:
+    - source_dir: salt://red/files/pxe/scripts/debian/stretch
       
       

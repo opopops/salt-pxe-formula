@@ -8,3 +8,6 @@ include:
   {%- if pxe.preseed is defined %}
   - pxe.preseed
   {%- endif %}
+  {%- if pxe.script is defined %}
+  - pxe.script
+  {%- endif %}
