@@ -2,7 +2,7 @@
 
 {%- for f in pxe.get('files', []) %}
   {%- if f.source_dir is defined %}
-{{pxe.root_dir|path_join('files', f.path)}}:
+{{pxe.root_dir|path_join(f.path)}}:
   file.recurse:
     - source: {{f.source_dir}}
     - user: {{pxe.user}}
@@ -13,7 +13,7 @@
     - template: jinja
     - defaults: {{ f.get('settings', {}) }}
   {%- elif f.source is defined %}
-{{pxe.root_dir|path_join('files', f.path)}}:
+{{pxe.root_dir|path_join(f.path)}}:
   file.managed:
     - source: {{f.source}}
     {%- if f.source_hash is defined %}

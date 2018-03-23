@@ -25,13 +25,8 @@ pxe:
           archs:
             - amd64
 
-    preseed:
-      - source: salt://path
-        file: preseed-box-crypto-nightly.cfg:
-        os: debian
-        oscodename: stretch
-
-    script:
-    - source_dir: salt://red/files/pxe/scripts/debian/stretch
+    files:
+      - source_dir: salt://scripts
+        path: scripts
       
       
