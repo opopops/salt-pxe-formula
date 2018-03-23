@@ -8,7 +8,7 @@
 {{pxe.root_dir|path_join('scripts')}}:
     {%- endif %}
   file.recurse:
-    - source: {{script.source}}
+    - source: {{script.source_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - dir_mode: 755

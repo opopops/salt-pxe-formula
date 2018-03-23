@@ -8,7 +8,7 @@
 {{pxe.root_dir|path_join('preseed')}}:
     {%- endif %}
   file.recurse:
-    - source: {{preseed.source}}
+    - source: {{preseed.source_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - dir_mode: 755
