@@ -67,7 +67,6 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
     - overwrite: True
     - enforce_toplevel: False
     - keep: False
-    - if_missing: {{pxe.root_dir | path_join('boot', os, dist, arch)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_dir
       {%- endfor %}
@@ -101,7 +100,6 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
     - overwrite: True
     - enforce_toplevel: False
     - keep: False
-    - if_missing: {{pxe.root_dir | path_join('boot', os, 'installer', dist, arch)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_dir
       {%- endfor %}
