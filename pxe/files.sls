@@ -2,11 +2,7 @@
 
 {%- for f in pxe.get('files', []) %}
   {%- if f.source_dir is defined %}
-    {%- if f.path is defined %}
 {{pxe.root_dir|path_join('files', f.path)}}:
-    {%- else %}
-{{pxe.root_dir|path_join('files')}}:
-    {%- endif %}
   f.recurse:
     - source: {{f.source_dir}}
     - user: {{pxe.user}}
