@@ -3,7 +3,7 @@
 {%- for f in pxe.get('files', []) %}
   {%- if f.source_dir is defined %}
 {{pxe.root_dir|path_join('files', f.path)}}:
-  f.recurse:
+  file.recurse:
     - source: {{f.source_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
@@ -14,7 +14,7 @@
     - defaults: {{ f.get('settings', {}) }}
   {%- elif f.source is defined %}
 {{pxe.root_dir|path_join('files', f.path)}}:
-  f.managed:
+  file.managed:
     - source: {{f.source}}
     {%- if f.source_hash is defined %}
     - source_hash: {{ f.source_hash }}
