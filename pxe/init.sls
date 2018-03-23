@@ -5,9 +5,6 @@ include:
   {%- if pxe.netboot is defined %}
   - pxe.netboot
   {%- endif %}
-  {%- if pxe.preseed is defined %}
-  - pxe.preseed
-  {%- endif %}
-  {%- if pxe.script is defined %}
-  - pxe.script
+  {%- if pxe.files is defined %}
+  - pxe.files
   {%- endif %}
