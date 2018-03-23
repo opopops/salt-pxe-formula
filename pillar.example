@@ -22,3 +22,10 @@ pxe:
         xenial:
           archs:
             - amd64
+    preseed:
+      - source: salt://path
+        file: preseed-box-crypto-nightly.cfg:
+        os: debian
+        oscodename: stretch
+      
+      
