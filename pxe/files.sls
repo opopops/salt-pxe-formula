@@ -28,7 +28,7 @@
   {%- elif f.type|lower == 'symlink' %}
 {{pxe.root_dir|path_join(f.path)}}:
   file.symlink:
-    - source: {{f.source}}
+    - name: {{f.name}}
     - target: {{f.target}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
