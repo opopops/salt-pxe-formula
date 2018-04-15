@@ -26,7 +26,8 @@ pxe:
             - amd64
 
     files:
-      - source_dir: salt://scripts
+      - source: salt://scripts
+        type: directory
         path: scripts
       
       

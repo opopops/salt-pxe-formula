@@ -1,10 +1,10 @@
 {%- from "pxe/map.jinja" import pxe with context %}
 
 {%- for f in pxe.get('files', []) %}
-  {%- if f.source_dir is defined %}
+  {%- if f.type|lower == 'directory' %}
 {{pxe.root_dir|path_join(f.path)}}:
   file.recurse:
-    - source: {{f.source_dir}}
+    - source: {{f.source}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - dir_mode: 755
@@ -12,7 +12,7 @@
     - makedirs: True
     - template: jinja
     - defaults: {{ f.get('settings', {}) }}
-  {%- elif f.source is defined %}
+  {%- elif f.type|lower == 'file' %}
 {{pxe.root_dir|path_join(f.path)}}:
   file.managed:
     - source: {{f.source}}
@@ -25,5 +25,14 @@
     - makedirs: True
     - template: jinja
     - defaults: {{ f.get('settings', {}) }}
+  {%- elif f.type|lower == 'symllink' %}
+{{pxe.root_dir|path_join(f.path)}}:
+  file.symlink:
+    - source: {{f.source}}
+    - target: {{f.target}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - mode: 644
+    - makedirs: True
   {%- endif %}
 {%- endfor %}
