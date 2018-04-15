@@ -25,7 +25,7 @@
     - makedirs: True
     - template: jinja
     - defaults: {{ f.get('settings', {}) }}
-  {%- elif f.type|lower == 'symllink' %}
+  {%- elif f.type|lower == 'symlink' %}
 {{pxe.root_dir|path_join(f.path)}}:
   file.symlink:
     - source: {{f.source}}
