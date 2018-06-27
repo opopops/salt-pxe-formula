@@ -42,9 +42,9 @@ pxe_efi64_boot_dir:
       - file: pxe_efi64_dir
       - file: pxe_efi64_dir
 
-{%- for os, os_params in pxe.get('netboot', {}).iteritems() %}
+{%- for os, os_params in pxe.get('netboot', {}).items() %}
   {%- if os == 'clonezilla' %}
-    {%- for dist, dist_params in os_params.get('dists', {}).iteritems() %}
+    {%- for dist, dist_params in os_params.get('dists', {}).items() %}
       {%- for arch in dist_params.get('archs', []) %}
 pxe_boot_{{os}}_{{dist}}_dir:
   file.directory:
@@ -72,7 +72,7 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
       {%- endfor %}
     {%- endfor %}  
   {%- elif os in ['debian', 'ubuntu'] %}
-    {%- for dist, dist_params in os_params.get('dists', {}).iteritems() %}
+    {%- for dist, dist_params in os_params.get('dists', {}).items() %}
       {%- for arch in dist_params.get('archs', []) %}
 pxe_boot_{{os}}_{{dist}}_dir:
   file.directory:
