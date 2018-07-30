@@ -3,50 +3,12 @@
 include:
   - pxe.install
 
-pxe_boot_dir:
-  file.directory:
-    - name: {{pxe.root_dir | path_join('boot')}}
-    - user: {{pxe.user}}
-    - group: {{pxe.group}}
-    - dir_mode: 755
-    - require:
-      - file: pxe_root_dir
-
-pxe_bios_boot_dir:
-  file.symlink:
-    - name: {{pxe.root_dir | path_join('bios', 'boot')}}
-    - target: '../boot'
-    - user: {{pxe.user}}
-    - group: {{pxe.group}}
-    - require:
-      - file: pxe_bios_dir
-      - file: pxe_boot_dir
-
-pxe_efi32_boot_dir:
-  file.symlink:
-    - name: {{pxe.root_dir | path_join('efi32', 'boot')}}
-    - target: '../boot'
-    - user: {{pxe.user}}
-    - group: {{pxe.group}}
-    - require:
-      - file: pxe_efi32_dir
-      - file: pxe_boot_dir
-
-pxe_efi64_boot_dir:
-  file.symlink:
-    - name: {{pxe.root_dir | path_join('efi64', 'boot')}}
-    - target: '../boot'
-    - user: {{pxe.user}}
-    - group: {{pxe.group}}
-    - require:
-      - file: pxe_efi64_dir
-      - file: pxe_efi64_dir
-
 {%- for os, os_params in pxe.get('netboot', {}).items() %}
   {%- if os == 'clonezilla' %}
-    {%- for dist, dist_params in os_params.get('dists', {}).items() %}
-      {%- for arch in dist_params.get('archs', []) %}
-pxe_boot_{{os}}_{{dist}}_dir:
+    {%- for dist, versions in os_params.get('dists', {}).items() %}
+      {%- for version in versions %}
+        {%- for arch in version.get('archs', []) %}
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
   file.directory:
     - name: {{pxe.root_dir | path_join('boot', os, 'dist')}}
     - user: {{pxe.user}}
@@ -56,10 +18,10 @@ pxe_boot_{{os}}_{{dist}}_dir:
     - require:
       - file: pxe_boot_dir
 
-pxe_boot_{{os}}_{{dist}}_{{arch}}:
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
   archive.extracted:
-    - name: {{pxe.root_dir | path_join('boot', os, dist, arch)}}
-    - source: {{os_params.base_url}}/clonezilla_live_{{dist}}/{{dist_params.version}}/clonezilla-live-{{dist_params.version}}-{{arch}}.zip
+    - name: {{pxe.root_dir | path_join('boot', os, dist, version.version, arch)}}
+    - source: {{os_params.base_url}}/clonezilla_live_{{dist}}/{{version.version}}/clonezilla-live-{{version.version}}-{{arch}}.zip
     - skip_verify: True
     - user: {{pxe.user}}
     - group: {{pxe.group}}
@@ -68,13 +30,25 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
     - enforce_toplevel: False
     - keep: False
     - require:
-      - file: pxe_boot_{{os}}_{{dist}}_dir
+      - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir
+
+{%- if version.get('default', False) %}
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('boot', os, dist, 'current')}}
+    - target: {{version.version}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - force: True
+{%- endif %}
+        {%- endfor %}
       {%- endfor %}
     {%- endfor %}  
   {%- elif os in ['debian', 'ubuntu'] %}
-    {%- for dist, dist_params in os_params.get('dists', {}).items() %}
-      {%- for arch in dist_params.get('archs', []) %}
-pxe_boot_{{os}}_{{dist}}_dir:
+    {%- for dist, versions in os_params.get('dists', {}).items() %}
+      {%- for version in versions %}
+        {%- for arch in version.get('archs', []) %}
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
   file.directory:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', 'dist')}}
     - user: {{pxe.user}}
@@ -84,14 +58,10 @@ pxe_boot_{{os}}_{{dist}}_dir:
     - require:
       - file: pxe_boot_dir
 
-pxe_boot_{{os}}_{{dist}}_{{arch}}:
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
   archive.extracted:
-    - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, arch)}}
-    {%- if os == 'debian' %}
-    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{dist_params.version|default('current')}}/images/netboot/netboot.tar.gz
-    {%- elif os == 'ubuntu' %}
-    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}-updates/main/installer-{{arch}}/{{dist_params.version|default('current')}}/images/netboot/netboot.tar.gz
-    {%- endif %}
+    - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, version.version, arch)}}
+    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{version.version|default('current')}}/images/netboot/netboot.tar.gz
     - skip_verify: True
     - options: --strip-components=3 
     - user: {{pxe.user}}
@@ -101,7 +71,18 @@ pxe_boot_{{os}}_{{dist}}_{{arch}}:
     - enforce_toplevel: False
     - keep: False
     - require:
-      - file: pxe_boot_{{os}}_{{dist}}_dir
+      - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir
+
+{%- if version.get('default', False) %}
+pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, 'current')}}
+    - target: {{version.version}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - force: True
+{%- endif %}
+        {%- endfor %}
       {%- endfor %}
     {%- endfor %}
   {%- endif %}

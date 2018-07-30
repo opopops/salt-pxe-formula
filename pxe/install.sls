@@ -18,6 +18,15 @@ pxe_root_dir:
     - require:
       - pkg: pxe_packages
 
+pxe_boot_dir:
+  file.directory:
+    - name: {{pxe.root_dir | path_join('boot')}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - dir_mode: 755
+    - require:
+      - file: pxe_root_dir
+
 pxe_web_dir:
   file.directory:
     - name: {{pxe.root_dir | path_join('www')}}
@@ -67,6 +76,15 @@ pxe_bios_pxelinux_conf_dir:
       - file: pxe_bios_dir
       - file: pxe_pxelinux_conf_dir
 
+pxe_bios_boot_dir:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('bios', 'boot')}}
+    - target: '../boot'
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - require:
+      - file: pxe_bios_dir
+
 pxe_pxelinux_file:
   file.copy:
     - name: {{pxe.root_dir | path_join('bios', 'pxelinux.0')}}
@@ -106,6 +124,15 @@ pxe_efi32_pxelinux_conf_dir:
     - require:
       - file: pxe_efi32_dir
       - file: pxe_pxelinux_conf_dir
+
+pxe_efi32_boot_dir:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('efi32', 'boot')}}
+    - target: '../boot'
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - require:
+      - file: pxe_efi32_dir
 
 pxe_efi32_syslinux_file:
   file.copy:
@@ -149,6 +176,15 @@ pxe_efi64_pxelinux_conf_dir:
     - require:
       - file: pxe_efi64_dir
       - file: pxe_pxelinux_conf_dir
+
+pxe_efi64_boot_dir:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('efi64', 'boot')}}
+    - target: '../boot'
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - require:
+      - file: pxe_efi64_dir
 
 pxe_efi64_syslinux_file:
   file.copy:
