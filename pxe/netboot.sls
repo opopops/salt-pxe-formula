@@ -13,7 +13,7 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
     - name: {{pxe.root_dir | path_join('boot', os, 'dist')}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - dir_mode: 755
+    - mode: 755
     - makedirs: True
     - require:
       - file: pxe_boot_dir
@@ -53,7 +53,7 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', 'dist')}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - dir_mode: 755
+    - mode: 755
     - makedirs: True
     - require:
       - file: pxe_boot_dir

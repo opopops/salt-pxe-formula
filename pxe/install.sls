@@ -9,12 +9,7 @@ pxe_root_dir:
     - name: {{pxe.root_dir}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - dir_mode: 755
-    - file_mode: 644
-    - recurse:
-      - user
-      - group
-      - mode
+    - mode: 755
     - require:
       - pkg: pxe_packages
 
@@ -23,7 +18,7 @@ pxe_boot_dir:
     - name: {{pxe.root_dir | path_join('boot')}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - dir_mode: 755
+    - mode: 755
     - require:
       - file: pxe_root_dir
 
@@ -46,12 +41,7 @@ pxe_pxelinux_conf_dir:
     - name: {{pxe.root_dir | path_join('pxelinux.cfg')}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
-    - dir_mode: 755
-    - file_mode: 644
-    - recurse:
-      - user
-      - group
-      - mode
+    - mode: 755
     - require:
       - file: pxe_root_dir
 
@@ -207,4 +197,3 @@ pxe_efi64_memtest_file:
     - force: True
     - require:
       - file: pxe_efi32_dir
-
