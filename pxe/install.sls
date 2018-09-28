@@ -52,6 +52,7 @@ pxe_bios_dir:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 755
+    - makedirs: True
     - force: True
     - require:
       - file: pxe_root_dir
@@ -93,6 +94,7 @@ pxe_bios_memtest_file:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 644
+    - makedirs: True
     - force: True
 
 
@@ -103,6 +105,7 @@ pxe_efi32_dir:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 755
+    - makedirs: True
     - force: True
 
 pxe_efi32_pxelinux_conf_dir:
@@ -131,6 +134,7 @@ pxe_efi32_syslinux_file:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 644
+    - makedirs: True
     - force: True
     - require:
       - file: pxe_efi32_dir
@@ -142,6 +146,7 @@ pxe_efi32_memtest_file:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 644
+    - makedirs: True
     - force: True
     - require:
       - file: pxe_efi32_dir

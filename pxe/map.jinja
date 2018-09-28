@@ -16,7 +16,7 @@ that differ from what is in defaults.yaml
     'Debian': {
         'pkgs': salt['grains.filter_by']({
             'Raspbian': ['syslinux-common', 'syslinux-efi', 'pxelinux'],
-            'default': ['syslinux', 'syslinux-efi', 'pxelinux', 'memtest86+']
+            'default': ['syslinux-common', 'syslinux', 'syslinux-efi', 'pxelinux', 'memtest86+']
         }, grain="os"),
         'user': 'root',
         'group': 'root',
