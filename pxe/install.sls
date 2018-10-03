@@ -87,6 +87,7 @@ pxe_pxelinux_file:
     - require:
       - file: pxe_bios_dir
 
+{%- if salt['grains.get']('os') in ['Debian', 'Ubuntu'] %}
 pxe_bios_memtest_file:
   file.copy:
     - name: {{pxe.root_dir | path_join('bios', 'memtest86+.bin')}}
@@ -96,7 +97,7 @@ pxe_bios_memtest_file:
     - mode: 644
     - makedirs: True
     - force: True
-
+{%- endif %}
 
 pxe_efi32_dir:
   file.copy:
@@ -139,6 +140,7 @@ pxe_efi32_syslinux_file:
     - require:
       - file: pxe_efi32_dir
 
+{%- if salt['grains.get']('os') in ['Debian', 'Ubuntu'] %}
 pxe_efi32_memtest_file:
   file.copy:
     - name: {{pxe.root_dir | path_join('efi32', 'memtest86+.bin')}}
@@ -150,6 +152,7 @@ pxe_efi32_memtest_file:
     - force: True
     - require:
       - file: pxe_efi32_dir
+{%- endif %}
 
 
 
@@ -192,6 +195,7 @@ pxe_efi64_syslinux_file:
     - require:
       - file: pxe_efi64_dir
 
+{%- if salt['grains.get']('os') in ['Debian', 'Ubuntu'] %}
 pxe_efi64_memtest_file:
   file.copy:
     - name: {{pxe.root_dir | path_join('efi64', 'memtest86+.bin')}}
@@ -202,3 +206,4 @@ pxe_efi64_memtest_file:
     - force: True
     - require:
       - file: pxe_efi32_dir
+{%- endif %}

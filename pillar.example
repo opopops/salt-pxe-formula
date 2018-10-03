@@ -2,32 +2,36 @@ pxe:
   lookup:
     user: dnsmasq
     group: www-data
+
   netboot:
     clonezilla:
+      overwrite: True
       dists:
         stable:
-          version: 2.5.2-31
-          archs:
-            - amd64
+          - version: 2.5.2-31
+            archs:
+              - amd64
 
     debian:
       dists:
         jessie:
+          - version: 20150422+deb8u4+b5
           archs:
             - amd64
         stretch:
-          archs:
-            - amd64
+          - version: 20170615+deb9u3
+            default: True
+            archs:
+              - amd64
 
     ubuntu:
       dists:
         xenial:
-          archs:
-            - amd64
+          - version: current
+            archs:
+              - amd64
 
     files:
       - source: salt://scripts
         type: directory
         path: scripts
-      
-      

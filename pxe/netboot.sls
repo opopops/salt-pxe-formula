@@ -26,9 +26,9 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - force: True
-    - overwrite: True
     - enforce_toplevel: False
-    - keep: False
+    - keep_source: {{os_params.get('keep_source', False)}}
+    - overwrite: {{os_params.get('overwrite', False)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir
 
@@ -43,7 +43,7 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
 {%- endif %}
         {%- endfor %}
       {%- endfor %}
-    {%- endfor %}  
+    {%- endfor %}
   {%- elif os in ['debian', 'ubuntu'] %}
     {%- for dist, versions in os_params.get('dists', {}).items() %}
       {%- for version in versions %}
@@ -63,13 +63,13 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, version.version, arch)}}
     - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{version.version|default('current')}}/images/netboot/netboot.tar.gz
     - skip_verify: True
-    - options: --strip-components=3 
+    - options: --strip-components=3
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - force: True
-    - overwrite: True
     - enforce_toplevel: False
-    - keep: False
+    - keep_source: {{os_params.get('keep_source', False)}}
+    - overwrite: {{os_params.get('overwrite', False)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir
 
