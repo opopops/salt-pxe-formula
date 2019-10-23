@@ -36,7 +36,17 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
 pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
   file.symlink:
     - name: {{pxe.root_dir | path_join('boot', os, dist, 'current')}}
-    - target: {{version.version}}
+    - target: '{{version.version}}'
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - force: True
+{%- endif %}
+
+{%- if version.get('installer', False) %}
+pxe_boot_{{os}}_installer_symlink:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join(os ~ '-installer')}}
+    - target: {{pxe.root_dir | path_join('boot', os, dist, version.version)}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - force: True
@@ -50,7 +60,7 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
         {%- for arch in version.get('archs', []) %}
 pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
   file.directory:
-    - name: {{pxe.root_dir | path_join('boot', os, 'installer', 'dist')}}
+    - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist)}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 755
@@ -78,6 +88,16 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}_default:
   file.symlink:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, 'current')}}
     - target: {{version.version}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - force: True
+{%- endif %}
+
+{%- if version.get('installer', False) %}
+pxe_boot_{{os}}_installer_symlink:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join(os ~ '-installer')}}
+    - target: {{pxe.root_dir | path_join('boot', os, 'installer', dist, version.version)}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - force: True
