@@ -10,7 +10,7 @@ include:
         {%- for arch in version.get('archs', []) %}
 pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
   file.directory:
-    - name: {{pxe.root_dir | path_join('boot', os, 'dist')}}
+    - name: {{pxe.root_dir | path_join('boot', os, dist)}}
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - mode: 755
@@ -27,7 +27,7 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
     - group: {{pxe.group}}
     - force: True
     - enforce_toplevel: False
-    - keep_source: {{os_params.get('keep_source', False)}}
+    - keep_source: {{os_params.get('keep_source', True)}}
     - overwrite: {{os_params.get('overwrite', False)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir
@@ -71,14 +71,18 @@ pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir:
 pxe_boot_{{os}}_{{dist}}_{{version.version}}_{{arch}}:
   archive.extracted:
     - name: {{pxe.root_dir | path_join('boot', os, 'installer', dist, version.version, arch)}}
+    {%- if dist in ['focal', 'groovy'] %}
+    - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{version.version|default('current')}}/legacy-images/netboot/netboot.tar.gz
+    {%- else %}
     - source: {{os_params.base_url}}/{{os}}/dists/{{dist}}/main/installer-{{arch}}/{{version.version|default('current')}}/images/netboot/netboot.tar.gz
+    {%- endif %}
     - skip_verify: True
     - options: --strip-components=3
     - user: {{pxe.user}}
     - group: {{pxe.group}}
     - force: True
     - enforce_toplevel: False
-    - keep_source: {{os_params.get('keep_source', False)}}
+    - keep_source: {{os_params.get('keep_source', True)}}
     - overwrite: {{os_params.get('overwrite', False)}}
     - require:
       - file: pxe_boot_{{os}}_{{dist}}_{{version.version}}_dir

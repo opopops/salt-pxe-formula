@@ -15,7 +15,7 @@ that differ from what is in defaults.yaml
 {% set os_family_map = salt['grains.filter_by']({
     'Debian': {
         'pkgs': salt['grains.filter_by']({
-            'Raspbian': ['syslinux-common', 'syslinux-efi', 'pxelinux'],
+            'Raspbian': ['grub-efi-arm-bin', 'syslinux-common', 'syslinux-efi', 'pxelinux'],
             'default': ['grub-efi-amd64-bin', 'syslinux-common', 'syslinux', 'syslinux-efi', 'pxelinux', 'memtest86+']
         }, grain="os"),
         'user': 'root',

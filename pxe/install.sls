@@ -207,3 +207,23 @@ pxe_efi64_memtest_file:
     - require:
       - file: pxe_efi32_dir
 {%- endif %}
+
+pxe_grub_dir:
+  file.recurse:
+    - name: {{pxe.root_dir | path_join('grub')}}
+    - source: salt://pxe/files/grub
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - dir_mode: 755
+    - file_mode: 644
+    - require:
+      - file: pxe_root_dir
+
+pxe_grub_conf_file:
+  file.symlink:
+    - name: {{pxe.root_dir | path_join('grub', 'grub.cfg')}}
+    - target: {{pxe.root_dir | path_join('grub.cfg')}}
+    - user: {{pxe.user}}
+    - group: {{pxe.group}}
+    - require:
+      - file: pxe_grub_dir
